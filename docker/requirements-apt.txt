@@ -1,5 +1,6 @@
-# List dependencies to be installed via apt-get below
+# Dependencies to install via apt-get update
 sudo
 python3
 python3-pip
 python3-pil
+sshfs

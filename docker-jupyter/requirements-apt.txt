@@ -1,0 +1,4 @@
+# Dependencies for jupyter to install via apt-get update
+python3-ipython
+python3-notebook
+jupyter

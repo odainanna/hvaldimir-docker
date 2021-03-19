@@ -3,6 +3,8 @@
 # FROM tensorflow/tensorflow:latest-gpu-jupyter
 FROM pytorch/pytorch:latest
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Set the working directory to 
 WORKDIR /project
 
@@ -22,9 +24,6 @@ RUN python3 -m pip install --trusted-host pypi.python.org -r /requirements-pip.t
 
 RUN groupadd -g $gid $user
 RUN useradd -u $uid -g $gid $user
-
-# Make port X available to the world outside this container
-# EXPOSE X
 
 # Define environment variable
 # Use only GPU 0

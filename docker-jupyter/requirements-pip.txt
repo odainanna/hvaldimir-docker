@@ -1,0 +1,4 @@
+# Dependencies for jupyter to install via pip3
+jupyterlab
+jupyterlab_widgets
+ipywidgets

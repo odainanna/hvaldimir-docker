@@ -1,1 +1,9 @@
-# Add packages to be installed via pip3 below
+# Dependencies to install via pip3
+# tensorflow
+scikit-learn
+# torch
+torchvision
+numpy
+pandas
+matplotlib
+seaborn
