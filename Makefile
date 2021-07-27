@@ -1,11 +1,9 @@
 # Set a new image name
-IMAGENAME = hvaldimir-docker
+IMAGENAME = hvaldimir
 # Choose which volumes to mount
-DISKS = -v $(PWD):/project
-# Set a port (for Jupyter)
+DISKS = -v $(PWD):/home/$(USERNAME)/project
+# Set a port (for serving Jupyter)
 PORT = 8890
-# Set the relative path to the directory with the base Dockerfile
-DOCKERPATH = docker
 
 # No need to change anything below unless you want to
 USERID    = $(shell id -u)
@@ -15,16 +13,17 @@ GPUS      = --gpus=1
 SSHFSOPTIONS = --cap-add SYS_ADMIN --device /dev/fuse
 NETOPTIONS = --network=host
 
-.PHONY: default .build-base .build-jupyter lab
+.PHONY: default lab host
 
-BUILDARGS = --build-arg user=$(USERNAME) --build-arg uid=$(USERID) --build-arg gid=$(GROUPID)
-.build-base: $(DOCKERPATH)/Dockerfile $(DOCKERPATH)/requirements-apt.txt $(DOCKERPATH)/requirements-pip.txt
-	docker build $(NETOPTIONS) $(BUILDARGS) -t $(USERNAME)-$(IMAGENAME) $(DOCKERPATH)
-.build-jupyter: $(DOCKERPATH)-jupyter/Dockerfile $(DOCKERPATH)-jupyter/requirements-apt.txt $(DOCKERPATH)-jupyter/requirements-pip.txt
-	docker build $(NETOPTIONS) $(BUILDARGS) -t $(USERNAME)-$(IMAGENAME)-jupyter $(DOCKERPATH)-jupyter
+.docker: ./Dockerfile
+	DOCKER_BUILDKIT=1 docker build $(NETOPTIONS) --build-arg user=$(USERNAME) --build-arg uid=$(USERID) --build-arg gid=$(GROUPID) -t $(USERNAME)-$(IMAGENAME) .
 
-RUNCMD = docker run $(GPUS) --rm $(NETOPTIONS) --user $(USERID):$(GROUPID) $(SSHFSOPTIONS) $(DISKS) -it $(USERNAME)-$(IMAGENAME)
-default: .build-base
+RUNCMD = docker run --name $(USERNAME)-$(IMAGENAME) $(GPUS) --rm $(NETOPTIONS) --user $(USERID):$(GROUPID) $(SSHFSOPTIONS) $(DISKS) -it $(USERNAME)-$(IMAGENAME)
+default: .docker
 	$(RUNCMD) bash
-lab: .build-base .build-jupyter
-	$(RUNCMD)-jupyter jupyter lab --ip '$(hostname -I)' --port $(PORT) --no-browser  --allow-root
+
+lab:    .docker
+	$(RUNCMD) jupyter lab
+
+host:   .docker
+	$(RUNCMD) jupyter lab --port $(PORT) --no-browser

@@ -1,9 +1,0 @@
-# Dependencies to install via pip3
-# tensorflow
-scikit-learn
-# torch
-torchvision
-numpy
-pandas
-matplotlib
-seaborn
