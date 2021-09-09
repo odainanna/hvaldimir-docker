@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install packages with pip
 RUN pip install --upgrade pip
-RUN python3 -m pip install --trusted-host pypi.python.org \
+RUN pip install --trusted-host pypi.python.org \
     ipywidgets \
     jupyterlab \
     jupyterlab_widgets 
