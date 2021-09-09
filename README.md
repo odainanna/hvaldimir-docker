@@ -1,7 +1,5 @@
 # hvaldimir
 
-![hvaldimir.png](hvaldimir.png)
-
 A template docker image that plays nicely with janus.uib.no. 
 
 ## Start a container
